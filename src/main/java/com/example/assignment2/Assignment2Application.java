@@ -10,6 +10,7 @@ public class Assignment2Application {
         SpringApplication.run(Assignment2Application.class, args);
         //test
         //test
+        //test2
     }
 
 }
