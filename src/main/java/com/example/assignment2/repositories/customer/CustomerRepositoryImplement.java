@@ -1,6 +1,6 @@
 package com.example.assignment2.repositories.customer;
 
-import com.example.assignment2.dataaccess.models.Customer;
+import com.example.assignment2.models.Customer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
