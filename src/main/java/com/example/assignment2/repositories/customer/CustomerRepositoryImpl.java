@@ -128,6 +128,24 @@ public class CustomerRepositoryImpl implements CustomerRepository{
     }
 
     @Override
+    public int updateCustomer(int id, String first_name) {
+        String sql = "UPDATE customer SET first_name = ? WHERE customer_id = ?";
+        int result = 0;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(2, id);
+            statement.setString(1,first_name);
+            // Execute statement
+            result = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+
+    }
+
+    @Override
     public int delete(Customer object) {
         return 0;
     }

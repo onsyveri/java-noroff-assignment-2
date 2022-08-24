@@ -10,4 +10,6 @@ public interface CRUDRepository<T, U> {
     int update(T object);
     int delete(T object);
     int deleteById(U id);
+
+    int updateCustomer(int id, String first_name);
 }
