@@ -8,8 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.swing.text.html.HTML.Tag.SELECT;
-
 @Repository
 public class CustomerRepositoryImpl implements CustomerRepository{
     private final String url;
@@ -25,6 +23,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
         this.password = password;
     }
 
+    //Finds all Customers
     @Override
     public List<Customer> findAll() {
 
@@ -34,6 +33,36 @@ public class CustomerRepositoryImpl implements CustomerRepository{
         try(Connection conn = DriverManager.getConnection(url, username,password)) {
             // Write statement
             PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            while (result.next()){
+                Customer customer = new Customer(
+                        result.getInt("customer_id"),
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getString("country"),
+                        result.getString("postal_code"),
+                        result.getString("phone"),
+                        result.getString("email")
+                );
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
+    }
+
+    // Finds customer by name
+    @Override
+    public List<Customer> findByName(String name) {
+        String sql = "SELECT * FROM customer WHERE first_name LIKE ?";
+        List<Customer> customers = new ArrayList<>();
+
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1,"%" + name + "%");
             // Execute statement
             ResultSet result = statement.executeQuery();
             while (result.next()){

@@ -19,7 +19,8 @@ public class AppRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        System.out.println(customerRepository.findAll());
+        // System.out.println(customerRepository.findAll());
+        System.out.println(customerRepository.findByName("Helen"));
     }
 
 }
