@@ -90,7 +90,27 @@ public class CustomerRepositoryImpl implements CustomerRepository{
 
     @Override
     public int insert(Customer object) {
-        return 0;
+
+        String sql = "INSERT INTO customer (customer_id, first_name, last_name, country, postal_code, phone, email) VALUES (?,?,?,?,?,?,?)";
+
+        int result = 0;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1,object.customer_id());
+            statement.setString(2, object.first_name());
+            statement.setString(3, object.last_name());
+            statement.setString(4, object.country());
+            statement.setString(5, object.postal_code());
+            statement.setString(6, object.phone());
+            statement.setString(7, object.email());
+            // Execute statement
+            result = statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
