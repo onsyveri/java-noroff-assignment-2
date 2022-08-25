@@ -1,0 +1,3 @@
+INSERT INTO superhero (hero_name, hero_alias, hero_origin) VALUES ('Bruce Wayne', 'Batman', 'Parents died in ally. Now rich and angry.');
+INSERT INTO superhero (hero_name, hero_alias, hero_origin) VALUES ('Peter Parker', 'Spider-Man', 'Bitten by spider. Can now climb and swing.');
+INSERT INTO superhero (hero_name, hero_alias, hero_origin) VALUES ('Billy Moon', 'Skateman', 'An aimless Vietnam veteran who becomes a roller derby star');
