@@ -1,6 +1,7 @@
 package com.example.assignment2.repositories.customer;
 
 import com.example.assignment2.models.Customer;
+import com.example.assignment2.models.CustomerCountry;
 import com.example.assignment2.models.CustomerGenre;
 import com.example.assignment2.models.CustomerSpender;
 import org.springframework.beans.factory.annotation.Value;
