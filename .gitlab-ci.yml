@@ -1,4 +1,4 @@
-image: gradle:jdk17-alpine
+image: gradle:jdk17-corretto
 stages:
   - build
 build-job:
