@@ -1,6 +1,7 @@
 package com.example.assignment2.repositories.customer;
 
 import com.example.assignment2.models.Customer;
+import com.example.assignment2.models.CustomerGenre;
 import com.example.assignment2.models.CustomerSpender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -147,6 +148,44 @@ public class CustomerRepositoryImpl implements CustomerRepository{
             e.printStackTrace();
         }
         return highestSpender;
+    }
+
+    //Finds customers most popular genre
+    @Override
+    public List<CustomerGenre> findPopularGenreByName(int id) {
+        String sql = "" +
+                "SELECT customer.customer_id, first_name, last_name, genre.name, COUNT(genre.genre_id) \n" +
+                "AS popular_genre\n" +
+                "FROM customer\n" +
+                "INNER JOIN invoice ON customer.customer_id = invoice.customer_id\n" +
+                "INNER JOIN invoice_line ON invoice_line.invoice_id = invoice.invoice_id\n" +
+                "INNER JOIN track ON track.track_id = invoice_line.track_id\n" +
+                "INNER JOIN genre ON genre.genre_id = track.genre_id\n" +
+                "WHERE customer.customer_id=?\n" +
+                "GROUP BY customer.customer_id, genre.name\n" +
+                "ORDER BY popular_genre DESC NULLS LAST\n" +
+                "FETCH FIRST 1 ROWS WITH TIES";
+        List<CustomerGenre> popularGenre = new ArrayList<>();
+
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, id);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            while (result.next()){
+                CustomerGenre customerGenre = new CustomerGenre(
+                        result.getInt("customer_id"),
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getString("name")
+                );
+                popularGenre.add(customerGenre);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return popularGenre;
     }
 
     @Override

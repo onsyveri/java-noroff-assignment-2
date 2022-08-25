@@ -1,6 +1,7 @@
 package com.example.assignment2.repositories.customer;
 
 import com.example.assignment2.models.Customer;
+import com.example.assignment2.models.CustomerGenre;
 import com.example.assignment2.models.CustomerSpender;
 import com.example.assignment2.repositories.CRUDRepository;
 
@@ -12,4 +13,7 @@ public interface CustomerRepository extends CRUDRepository<Customer, Integer> {
 
     //Finds customer who spends the most
     List<CustomerSpender> findHighestSpender();
+
+    //Finds customers most popular genre
+    List<CustomerGenre> findPopularGenreByName(int customer_id);
 }
