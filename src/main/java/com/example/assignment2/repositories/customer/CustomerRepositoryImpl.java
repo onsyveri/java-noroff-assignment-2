@@ -1,14 +1,13 @@
 package com.example.assignment2.repositories.customer;
 
 import com.example.assignment2.models.Customer;
+import com.example.assignment2.models.CustomerCountry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static javax.swing.text.html.HTML.Tag.SELECT;
 
 @Repository
 public class CustomerRepositoryImpl implements CustomerRepository{
@@ -111,10 +110,32 @@ public class CustomerRepositoryImpl implements CustomerRepository{
         return customers;
     }
 
-
-
-
-
+    @Override
+    public List<CustomerCountry> findCountry() {
+        String sql = "SELECT country, COUNT(country)\n" +
+                "AS country_occurrence\n" +
+                "FROM customer\n" +
+                "GROUP BY country\n" +
+                "ORDER BY country_occurrence DESC\n" +
+                "LIMIT 1;";
+        List<CustomerCountry> customerCountries = new ArrayList<>();
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            while (result.next()){
+                CustomerCountry customerCountry = new CustomerCountry(
+                        result.getString("country"),
+                        result.getInt("country_occurrence")
+                );
+                customerCountries.add(customerCountry);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerCountries;
+    }
 
 
     @Override
