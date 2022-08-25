@@ -30,6 +30,7 @@ public class AppRunner implements ApplicationRunner {
                 "111-44-222",
                 "o@s.com"
         );*/
+        System.out.println(customerRepository.limitAndOffset(4,5));
         System.out.println(customerRepository.findPopularGenreByName(12));
     }
 

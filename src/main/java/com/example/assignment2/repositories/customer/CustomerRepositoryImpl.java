@@ -1,6 +1,7 @@
 package com.example.assignment2.repositories.customer;
 
 import com.example.assignment2.models.Customer;
+import com.example.assignment2.models.CustomerCountry;
 import com.example.assignment2.models.CustomerGenre;
 import com.example.assignment2.models.CustomerSpender;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,6 +86,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
         return customers;
     }
 
+    // Finds customer by id
     @Override
     public List <Customer> findById(int id) {
         String sql = "SELECT * FROM customer WHERE customer_id = ?";
@@ -113,7 +115,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
         return customers;
     }
 
-    // Inserts a new customer
+    // Order by limit and offset
     @Override
     public List <Customer> limitAndOffset(int limit, int offset) {
         String sql = "SELECT * FROM customer LIMIT ? OFFSET ?";
@@ -143,6 +145,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
         return customers;
     }
 
+    //Orders country by most visited
     @Override
     public List<CustomerCountry> findCountry() {
         String sql = "SELECT country, COUNT(country)\n" +
@@ -170,7 +173,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
         return customerCountries;
     }
 
-
+    // Insert a new customer
     @Override
     public int insert(Customer object) {
 
@@ -235,7 +238,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
     public List<CustomerGenre> findPopularGenreByName(int id) {
         String sql = "" +
                 "SELECT customer.customer_id, first_name, last_name, genre.name, COUNT(genre.genre_id) \n" +
-                "AS popular_genre\n" +
+                "AS track_count\n" +
                 "FROM customer\n" +
                 "INNER JOIN invoice ON customer.customer_id = invoice.customer_id\n" +
                 "INNER JOIN invoice_line ON invoice_line.invoice_id = invoice.invoice_id\n" +
@@ -243,7 +246,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
                 "INNER JOIN genre ON genre.genre_id = track.genre_id\n" +
                 "WHERE customer.customer_id=?\n" +
                 "GROUP BY customer.customer_id, genre.name\n" +
-                "ORDER BY popular_genre DESC NULLS LAST\n" +
+                "ORDER BY track_count DESC NULLS LAST\n" +
                 "FETCH FIRST 1 ROWS WITH TIES";
         List<CustomerGenre> popularGenre = new ArrayList<>();
 
@@ -258,7 +261,8 @@ public class CustomerRepositoryImpl implements CustomerRepository{
                         result.getInt("customer_id"),
                         result.getString("first_name"),
                         result.getString("last_name"),
-                        result.getString("name")
+                        result.getString("name"),
+                        result.getInt("track_count")
                 );
                 popularGenre.add(customerGenre);
             }
@@ -273,6 +277,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
         return 0;
     }
 
+    // Updates a customers name
     @Override
     public int updateCustomer(int id, String first_name) {
         String sql = "UPDATE customer SET first_name = ? WHERE customer_id = ?";
