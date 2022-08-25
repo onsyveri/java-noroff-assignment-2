@@ -1,0 +1,13 @@
+image: gradle:jdk17-alpine
+stages:
+  - build
+build-job:
+  stage: build
+  script:
+    - gradle assemble
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1 week
+  only:
+    - main 
