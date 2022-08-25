@@ -1,6 +1,7 @@
 package com.example.assignment2.repositories.customer;
 
 import com.example.assignment2.models.Customer;
+import com.example.assignment2.models.CustomerSpender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -88,6 +89,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
         return null;
     }
 
+    // Inserts a new customer
     @Override
     public int insert(Customer object) {
 
@@ -111,6 +113,40 @@ public class CustomerRepositoryImpl implements CustomerRepository{
             e.printStackTrace();
         }
         return result;
+    }
+
+    //Finds customer who spends the most
+    @Override
+    public List<CustomerSpender> findHighestSpender() {
+
+        String sql = "" +
+                "SELECT customer.customer_id, first_name, last_name, invoice.total " +
+                "FROM customer " +
+                "INNER JOIN invoice ON customer.customer_id = invoice.customer_id " +
+                "WHERE total = ( SELECT MAX(total) FROM invoice )" +
+                "";
+        List<CustomerSpender> highestSpender = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                CustomerSpender customerSpender = new CustomerSpender(
+                        result.getInt("customer_id"),
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getDouble("total")
+                );
+                highestSpender.add(customerSpender);
+            }
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        return highestSpender;
     }
 
     @Override

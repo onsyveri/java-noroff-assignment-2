@@ -21,7 +21,7 @@ public class AppRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // System.out.println(customerRepository.findAll());
-        Customer customer = new Customer(
+        /*Customer customer = new Customer(
                 60,
                 "Ole",
                 "Syverinsen",
@@ -29,8 +29,8 @@ public class AppRunner implements ApplicationRunner {
                 "1415",
                 "111-44-222",
                 "o@s.com"
-        );
-        System.out.println(customerRepository.insert(customer));
+        );*/
+        System.out.println(customerRepository.findHighestSpender());
     }
 
 }
